@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#D61E1C">
+<title>Análise de Perfil — Sistema Japa da Loto | G1</title>
+<meta name="description" content="Responda o quiz rápido para verificar se você se qualifica para usar o Sistema Japa da Loto.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+*:focus,*:focus-visible{outline:none!important;-webkit-tap-highlight-color:transparent}
+button,a,.g1-menu-btn,.g1-header-actions svg,.g1-user-icon{-webkit-tap-highlight-color:transparent}
+:root{
+  --g1-red:#D61E1C;
+  --g1-blue:#0056B3;
+  --g1-text:#1A1A1A;
+  --g1-text-secondary:#3a3a3a;
+  --g1-text-muted:#717171;
+  --g1-border:#E0E0E0;
+  --g1-bg:#F0F1F3;
+  --g1-white:#FFF;
+  --green:#1B9E4B;
+  --green-light:#E8F7EE;
+  --green-dark:#157A3B;
+  --amber:#F59E0B;
+  --amber-bg:#FFFBEB;
+  --amber-border:#FDE68A;
+  --amber-text:#92400E;
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+body{font-family:'Encode Sans',Helvetica,Arial,sans-serif;background:var(--g1-bg);color:var(--g1-text);overflow-x:hidden;line-height:1.6;padding-bottom:env(safe-area-inset-bottom)}
+
+.g1-header{background:var(--g1-red);position:relative;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.g1-header-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:48px}
+.g1-menu-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:8px}
+.g1-menu-btn span{display:block;width:20px;height:2.5px;background:#fff;border-radius:2px}
+.g1-logo{font-size:32px;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;position:absolute;left:50%;transform:translateX(-50%)}
+.g1-header-actions{display:flex;align-items:center;gap:12px}
+.g1-header-actions svg{width:22px;height:22px;fill:#fff;cursor:pointer;opacity:.9}
+.g1-user-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center}
+.g1-user-icon svg{width:16px;height:16px}
+
+.quiz-wrap{max-width:480px;margin:0 auto;padding:20px 16px 60px}
+
+/* ===== PROGRESS (sem contagem, só barra + %) ===== */
+.quiz-progress{margin-bottom:18px;background:var(--g1-white);border-radius:14px;padding:12px 18px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.quiz-progress-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.quiz-progress-label{font-size:12px;font-weight:700;color:var(--g1-text-muted);letter-spacing:.02em}
+.quiz-progress-pct{font-size:14px;font-weight:900;color:var(--g1-red)}
+.quiz-progress-bar{width:100%;height:8px;background:#EAECEF;border-radius:4px;overflow:hidden}
+.quiz-progress-fill{height:100%;background:linear-gradient(90deg,var(--g1-red) 0%,#E8453C 100%);border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+/* ===== CARD ===== */
+.quiz-card{background:var(--g1-white);border-radius:18px;box-shadow:0 4px 20px rgba(0,0,0,.06);overflow:hidden;animation:cardIn .4s cubic-bezier(.4,0,.2,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* ===== CONTEXT: headline block ===== */
+.quiz-context{padding:22px 22px 18px}
+
+.quiz-headline{font-size:16px;font-weight:700;color:var(--g1-text);line-height:1.55;letter-spacing:-.01em;margin-bottom:12px}
+.quiz-headline strong{color:var(--g1-red);font-weight:800}
+
+.quiz-subheadline{font-size:15px;font-weight:600;color:var(--g1-text-secondary);line-height:1.55;margin-bottom:12px}
+
+.quiz-context-divider{height:1px;background:var(--g1-border);margin:14px 0}
+
+.quiz-support{font-size:14px;font-weight:700;color:#991B1B;line-height:1.5;padding-left:14px;border-left:3px solid var(--g1-red);margin-bottom:4px}
+
+/* ===== CONTEXT: testimonial block ===== */
+.quiz-testimonial{padding:18px 20px;background:linear-gradient(135deg,#F0FDF4 0%,#ECFDF5 100%);border:1px solid rgba(27,158,75,.18);border-radius:14px;margin-bottom:16px}
+.quiz-testimonial-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.quiz-testimonial-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(27,158,75,.2)}
+.quiz-testimonial-stars{display:flex;gap:2px}
+.quiz-testimonial-stars svg{width:16px;height:16px;fill:var(--amber)}
+.quiz-testimonial-author{font-size:13px;font-weight:700;color:var(--green-dark)}
+.quiz-testimonial-text{font-size:16px;font-weight:700;color:#166534;line-height:1.5}
+
+
+/* ===== QUESTION ===== */
+.quiz-body{padding:22px}
+.quiz-question{font-size:18px;font-weight:800;color:var(--g1-text);line-height:1.4;margin-bottom:22px;letter-spacing:-.02em}
+
+/* ===== OPTIONS ===== */
+.quiz-options{display:flex;flex-direction:column;gap:10px}
+.quiz-option{display:flex;align-items:center;gap:14px;padding:16px 18px;border:2px solid #E5E7EB;border-radius:14px;background:var(--g1-white);cursor:pointer;transition:all .18s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent;font-size:16px;font-weight:600;color:var(--g1-text-secondary);line-height:1.35;position:relative}
+.quiz-option:hover{border-color:#CBD5E1;background:#FAFBFC}
+.quiz-option:active{transform:scale(.98)}
+.quiz-option .opt-letter{width:36px;height:36px;border-radius:10px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#64748B;flex-shrink:0;transition:all .18s ease}
+.quiz-option.selected{border-color:var(--green);background:var(--green-light)}
+.quiz-option.selected .opt-letter{background:var(--green);color:#fff}
+.quiz-option.selected .opt-check{opacity:1;transform:scale(1)}
+.opt-check{position:absolute;right:16px;top:50%;margin-top:-10px;width:20px;height:20px;opacity:0;transform:scale(.5);transition:all .2s ease}
+.opt-check svg{width:20px;height:20px;fill:none;stroke:var(--green);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== HIGHLIGHT OVERLAY (centro da tela + backdrop blur) ===== */
+.quiz-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease}
+.quiz-overlay.visible{opacity:1;visibility:visible}
+.quiz-overlay-card{background:var(--g1-white);border-radius:20px;padding:32px 26px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2);text-align:center;transform:scale(.9) translateY(20px);transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.quiz-overlay.visible .quiz-overlay-card{transform:scale(1) translateY(0)}
+.quiz-overlay-bar{width:40px;height:4px;background:var(--amber);border-radius:2px;margin:0 auto 18px}
+.quiz-overlay-text{font-size:17px;font-weight:700;color:var(--amber-text);line-height:1.55}
+.quiz-overlay-text strong{color:#B45309}
+.quiz-overlay-icon{width:48px;height:48px;margin:0 auto 16px;background:var(--amber-bg);border:2px solid var(--amber-border);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.quiz-overlay-icon svg{width:24px;height:24px;fill:none;stroke:var(--amber);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== LOADING ===== */
+.quiz-loading{text-align:center;padding:32px 24px 40px}
+.quiz-loading-header{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--g1-text-muted);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+.quiz-loading-header::before,.quiz-loading-header::after{content:'';flex:1;height:1px;background:var(--g1-border)}
+.quiz-loading-spinner{width:52px;height:52px;margin:0 auto 20px;border:4px solid #EAECEF;border-top-color:var(--g1-red);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.quiz-loading-pct{font-size:38px;font-weight:900;color:var(--g1-red);margin-bottom:4px;letter-spacing:-.03em;line-height:1}
+.quiz-loading-pct-label{font-size:12px;font-weight:700;color:var(--g1-text-muted);letter-spacing:.05em;margin-bottom:16px}
+.quiz-loading-bar-wrap{width:100%;max-width:280px;height:6px;background:#EAECEF;border-radius:4px;overflow:hidden;margin:0 auto 24px}
+.quiz-loading-bar{height:100%;background:linear-gradient(90deg,var(--g1-red),#E8453C);border-radius:4px;transition:width .25s linear;width:0}
+.quiz-loading-msgs{text-align:left;max-width:300px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.quiz-loading-msg-item{font-size:14px;font-weight:600;color:var(--g1-text-secondary);line-height:1.55;padding:0 4px;display:flex;gap:6px;align-items:flex-start;opacity:0;animation:msgIn .4s ease forwards}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.quiz-loading-msg-item::before{content:'›';color:var(--g1-red);font-weight:900;font-size:16px;flex-shrink:0;line-height:1.45}
+
+/* ===== POPUP VAGA CONFIRMADA ===== */
+.vaga-popup{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease}
+.vaga-popup.visible{opacity:1;visibility:visible}
+.vaga-popup-card{background:#fff;border-radius:24px;padding:36px 28px 32px;max-width:360px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.22);text-align:center;transform:scale(.88) translateY(24px);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+.vaga-popup.visible .vaga-popup-card{transform:scale(1) translateY(0)}
+.vaga-popup-icon{width:64px;height:64px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 24px rgba(27,158,75,.35)}
+.vaga-popup-icon svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.vaga-popup-badge{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--green);background:#E8F7EE;border:1px solid rgba(27,158,75,.25);border-radius:20px;padding:3px 12px;margin-bottom:14px}
+.vaga-popup-title{font-size:26px;font-weight:900;color:var(--green-dark);letter-spacing:-.01em;line-height:1.1;margin-bottom:10px}
+.vaga-popup-sub{font-size:14px;font-weight:600;color:#166534;line-height:1.55}
+
+@media(max-width:400px){
+  .quiz-wrap{padding:14px 12px 48px}
+  .quiz-context{padding:18px 16px 14px}
+  .quiz-headline{font-size:15px}
+  .quiz-body{padding:18px 16px}
+  .quiz-question{font-size:16px}
+  .quiz-option{padding:14px 14px;font-size:15px;gap:12px}
+  .quiz-option .opt-letter{width:32px;height:32px;font-size:13px;border-radius:8px}
+  .quiz-overlay-card{padding:26px 20px}
+  .quiz-overlay-text{font-size:15px}
+}
+</style>
+
+  <script
+    src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+    data-utmify-prevent-xcod-sck
+    data-utmify-prevent-subids
+    async
+    defer
+  ></script>
+  <script>
+    window.pixelId = "68092479fde434f6021c8c7b";
+    var a = document.createElement("script");
+    a.setAttribute("async", "");
+    a.setAttribute("defer", "");
+    a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+    document.head.appendChild(a);
+  </script>
+
+</head>
+<body>
+<script>
+(function(){
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  function goTop(){ window.scrollTo(0,0); }
+  function clearFocus(){setTimeout(function(){var el=document.activeElement;if(el&&el!==document.body&&el!==document.documentElement)el.blur()},0)}
+  window.addEventListener('load',function(){goTop();clearFocus();});
+  window.addEventListener('pageshow',function(e){goTop();if(e.persisted)clearFocus();});
+})();
+</script>
+
+
+<section class="quiz-wrap">
+  <div class="quiz-progress">
+    <div class="quiz-progress-top">
+      <span class="quiz-progress-label" id="progressLabel">Seu progresso</span>
+      <span class="quiz-progress-pct" id="progressPercent">0%</span>
+    </div>
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="quiz-overlay-card">
+    <div class="quiz-overlay-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg></div>
+    <div class="quiz-overlay-bar"></div>
+    <div class="quiz-overlay-text" id="overlayText"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var NEXT_PAGE = 'etapa5-vsl-03.html';
+
+  var STAR_SVG = '<svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.33L10 13.27l-4.77 2.45.91-5.33L2.27 6.62l5.34-.78L10 1z"/></svg>';
+  var CHECK_SVG = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+  var ALERT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+
+  var steps = [
+    {
+      type: 'question',
+      q: 'Você concorda em manter este sistema em sigilo e não compartilhar os números com funcionários da Caixa?',
+      opts: [
+        'Sim',
+        'Não'
+      ]
+    },
+    {
+      type: 'question',
+      q: 'Você possui vínculo direto ou indireto com a administração das Loterias Caixa?',
+      opts: [
+        'Não, nenhum vínculo',
+        'Sim, sou funcionário'
+      ]
+    },
+    {
+      type: 'question',
+      q: 'Caso sua sequência premiada seja liberada agora, você tem disponibilidade para realizar a aposta nas próximas 24 horas?',
+      opts: [
+        'Sim',
+        'Preciso de mais tempo'
+      ]
+    }
+  ];
+
+  var totalQuestions = steps.filter(function(s){ return s.type === 'question'; }).length;
+  var questionIndex = 0;
+  var currentStep = 0;
+  var letters = ['A','B','C','D','E','F'];
+
+  var container = document.getElementById('quizContainer');
+  var progressLabel = document.getElementById('progressLabel');
+  var progressPercent = document.getElementById('progressPercent');
+  var progressFill = document.getElementById('progressFill');
+  var overlay = document.getElementById('quizOverlay');
+  var overlayText = document.getElementById('overlayText');
+
+  function updateProgress(qIdx) {
+    var pct = qIdx === totalQuestions - 1 ? 95 : Math.round((qIdx / totalQuestions) * 100);
+    progressPercent.textContent = pct + '%';
+    progressFill.style.width = pct + '%';
+  }
+
+  function buildContext(step) {
+    var html = '';
+    var hasContext = step.headline || step.testimonial || step.subheadline || step.support;
+    if (!hasContext) return '';
+
+    html += '<div class="quiz-context">';
+
+    if (step.headline) {
+      html += '<div class="quiz-headline">' + step.headline + '</div>';
+    }
+
+    if (step.subheadline && !step.testimonial) {
+      html += '<div class="quiz-subheadline">' + step.subheadline + '</div>';
+    }
+
+    if (step.support) {
+      html += '<div class="quiz-context-divider"></div>';
+      html += '<div class="quiz-support">' + step.support + '</div>';
+    }
+
+    if (step.testimonial) {
+      var t = step.testimonial;
+      var starsHTML = '';
+      for (var i = 0; i < t.stars; i++) starsHTML += STAR_SVG;
+      var avatarHTML = t.avatar ? '<img class="quiz-testimonial-avatar" src="' + t.avatar + '" alt="' + t.author + '" loading="lazy">' : '';
+      html += '<div class="quiz-testimonial">' +
+        '<div class="quiz-testimonial-header">' +
+          avatarHTML +
+          '<div>' +
+            '<div class="quiz-testimonial-stars">' + starsHTML + '</div>' +
+            '<div class="quiz-testimonial-author">' + t.author + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="quiz-testimonial-text">' + t.text + '</div>' +
+      '</div>';
+      if (step.subheadline) {
+        html += '<div class="quiz-subheadline">' + step.subheadline + '</div>';
+      }
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  function showOverlay(text, callback) {
+    overlayText.innerHTML = text;
+    overlay.classList.add('visible');
+    setTimeout(function(){
+      overlay.classList.remove('visible');
+      setTimeout(callback, 350);
+    }, 2800);
+  }
+
+  function renderStep(idx) {
+    var step = steps[idx];
+    if (!step) { showFinalLoading(); return; }
+
+    if (step.type === 'loading') {
+      renderLoading(step, function(){ currentStep++; renderStep(currentStep); });
+      return;
+    }
+
+    updateProgress(questionIndex);
+
+    var contextHTML = buildContext(step);
+
+    var optsHTML = '';
+    step.opts.forEach(function(opt, i) {
+      optsHTML += '<div class="quiz-option" data-idx="' + i + '">' +
+        '<span class="opt-letter">' + letters[i] + '</span>' +
+        '<span>' + opt + '</span>' +
+        '<span class="opt-check">' + CHECK_SVG + '</span>' +
+      '</div>';
+    });
+
+    var cardHTML = '<div class="quiz-card">' +
+      contextHTML +
+      (contextHTML ? '<div class="quiz-body" style="padding-top:0">' : '<div class="quiz-body">') +
+        '<div class="quiz-question">' + step.q + '</div>' +
+        '<div class="quiz-options">' + optsHTML + '</div>' +
+      '</div>' +
+    '</div>';
+
+    container.innerHTML = cardHTML;
+    window.scrollTo({top:0,behavior:'smooth'});
+
+    var highlightText = step.highlight || null;
+
+    container.querySelectorAll('.quiz-option').forEach(function(optEl) {
+      optEl.addEventListener('click', function() {
+        if (container.dataset.locked === '1') return;
+        container.dataset.locked = '1';
+        optEl.classList.add('selected');
+        var chosenIdx = parseInt(optEl.getAttribute('data-idx'));
+
+        if (highlightText) {
+          setTimeout(function(){
+            showOverlay(highlightText, function(){ advance(chosenIdx); });
+          }, 500);
+        } else {
+          setTimeout(function(){ advance(chosenIdx); }, 600);
+        }
+      });
+    });
+
+    function advance(chosenIdx) {
+      var qNum = questionIndex + 1;
+      if (window._japTrack) {
+        window._japTrack('quiz-q' + qNum);
+        window._japTrack('quiz-q' + qNum + '-' + letters[chosenIdx].toLowerCase());
+      }
+      questionIndex++;
+      currentStep++;
+      container.dataset.locked = '0';
+      if (currentStep < steps.length) {
+        renderStep(currentStep);
+      } else {
+        showFinalLoading();
+      }
+    }
+  }
+
+  function renderLoading(step, onDone) {
+    progressLabel.textContent = 'Processando...';
+
+    container.innerHTML =
+      '<div class="quiz-card">' +
+        '<div class="quiz-loading">' +
+          '<div class="quiz-loading-spinner"></div>' +
+          '<div class="quiz-loading-pct" id="midLoadPct">0%</div>' +
+          '<div class="quiz-loading-text">' + step.text + '</div>' +
+          '<div class="quiz-loading-sub">' + step.sub + '</div>' +
+          '<div class="quiz-loading-bar-wrap"><div class="quiz-loading-bar" id="midLoadBar"></div></div>' +
+        '</div>' +
+      '</div>';
+
+    window.scrollTo({top:0,behavior:'smooth'});
+    animateBar('midLoadBar', 'midLoadPct', step.duration || 3000, function(){ setTimeout(onDone, 300); });
+  }
+
+  function showFinalLoading() {
+    progressLabel.textContent = 'Finalizando';
+    progressPercent.textContent = '99%';
+    progressFill.style.width = '99%';
+    setTimeout(function(){ progressPercent.textContent = '100%'; progressFill.style.width = '100%'; }, 4500);
+
+    container.innerHTML =
+      '<div class="quiz-card">' +
+        '<div class="quiz-loading">' +
+          '<div class="quiz-loading-spinner"></div>' +
+          '<div class="quiz-loading-pct" id="finalLoadPct">0%</div>' +
+          '<div class="quiz-loading-pct-label">processando</div>' +
+          '<div class="quiz-loading-bar-wrap"><div class="quiz-loading-bar" id="finalLoadBar"></div></div>' +
+          '<div class="quiz-loading-msgs" id="loadingMsgs"></div>' +
+        '</div>' +
+      '</div>';
+
+    var vagaPopup = document.createElement('div');
+    vagaPopup.className = 'vaga-popup';
+    vagaPopup.id = 'vagaPopup';
+    vagaPopup.innerHTML =
+      '<div class="vaga-popup-card">' +
+        '<div class="vaga-popup-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>' +
+        '<div class="vaga-popup-badge">SISTEMA LIBERADO</div>' +
+        '<div class="vaga-popup-title">VAGA CONFIRMADA</div>' +
+        '<div class="vaga-popup-sub" id="vagaPopupSub">Acesso ao sistema liberado para sua região</div>' +
+      '</div>';
+    document.body.appendChild(vagaPopup);
+
+    window.scrollTo({top:0,behavior:'smooth'});
+
+    var city = '';
+    fetch('https://ipapi.co/json/')
+      .then(function(r){ return r.json(); })
+      .then(function(d){ city = d.city || d.region || ''; })
+      .catch(function(){});
+
+    function addMsg(text) {
+      var msgsEl = document.getElementById('loadingMsgs');
+      if (!msgsEl) return;
+      var item = document.createElement('div');
+      item.className = 'quiz-loading-msg-item';
+      item.textContent = text;
+      msgsEl.appendChild(item);
+    }
+
+    var MSG0_T = 300;
+    var MSG1_T = 1600;
+    var MSG2_T = 3200;
+    var POPUP_T = MSG2_T + 900;
+    var REDIRECT_T = POPUP_T + 3000;
+
+    setTimeout(function(){ addMsg('VERIFICAÇÃO DE SEGURANÇA 99% CONCLUÍDA...'); }, MSG0_T);
+    setTimeout(function(){ addMsg('Liberando acesso ao sistema e processando a transferência do seu PIX de R$ 1.000...'); }, MSG1_T);
+    setTimeout(function(){ addMsg('Localizando vaga disponível para a região' + (city ? ' (' + city + ')' : '') + '...'); }, MSG2_T);
+    setTimeout(function(){
+      var subEl = document.getElementById('vagaPopupSub');
+      if(subEl && city) subEl.textContent = 'Vaga liberada para ' + city;
+      var popup = document.getElementById('vagaPopup');
+      if(popup) popup.classList.add('visible');
+      setTimeout(function(){ window.location.href = NEXT_PAGE; }, 3000);
+    }, POPUP_T);
+
+    animateBar('finalLoadBar', 'finalLoadPct', POPUP_T, function(){});
+  }
+
+  function animateBar(barId, pctId, duration, onComplete) {
+    var bar = document.getElementById(barId);
+    var pctEl = document.getElementById(pctId);
+    var start = performance.now();
+    function tick(now) {
+      var elapsed = now - start;
+      var pct = Math.min(100, Math.floor((elapsed / duration) * 100));
+      bar.style.width = pct + '%';
+      pctEl.textContent = pct + '%';
+      if (elapsed >= duration) {
+        bar.style.width = '100%';
+        pctEl.textContent = '100%';
+        onComplete();
+        return;
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  renderStep(0);
+})();
+</script>
+
+<script>
+(function(){
+  function gid(n){var c=document.cookie.match(new RegExp('(?:^|; )'+n+'=([^;]*)'));return c?c[1]:null}
+  function sid(n,v,d){var e=new Date;e.setTime(e.getTime()+d*864e5);document.cookie=n+'='+v+';path=/;expires='+e.toUTCString()+';SameSite=Lax'}
+  function uuid(){return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return(c==='x'?r:r&3|8).toString(16)})}
+  var vid=gid('_jap_vid');if(!vid){vid=uuid();sid('_jap_vid',vid,365)}
+  var ss=sessionStorage.getItem('_jap_sid');if(!ss){ss=uuid();sessionStorage.setItem('_jap_sid',ss)}
+  var p=new URLSearchParams(location.search);
+  var _uk=['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  _uk.forEach(function(k){var v=p.get(k);if(v)sessionStorage.setItem('_jap_'+k,v);});
+  function _gu(k){return p.get(k)||sessionStorage.getItem('_jap_'+k)||'';}
+  window._japTrack=function(slug){fetch('/analytics/track.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page_slug:slug,funnel_id:'5',visitor_id:vid,session_id:ss,utm_source:_gu('utm_source'),utm_medium:_gu('utm_medium'),utm_campaign:_gu('utm_campaign'),utm_content:_gu('utm_content'),utm_term:_gu('utm_term'),referrer:document.referrer}),keepalive:true}).catch(function(){})};
+  window._japTrack('etapa4-quiz');
+})();
+</script>
+</body>
+</html>
