@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Política de Privacidade</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0a2540;
+      padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .header-logo {
+      height: 32px;
+      width: auto;
+    }
+
+    .header-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.25rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 55vw;
+    }
+
+    .header-menu {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 12px;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .header-menu svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px max(16px, env(safe-area-inset-right)) 40px max(16px, env(safe-area-inset-left));
+      line-height: 1.7;
+      flex: 1;
+      width: 100%;
+    }
+
+    .content h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .content h2 {
+      font-size: 1.05rem;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .content p {
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .btn-voltar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: #0a2540;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 24px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      min-height: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-voltar:hover {
+      background: #0d3460;
+    }
+
+    .btn-voltar svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .footer {
+      padding: 24px max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .footer-links a + a {
+      margin-top: 1px;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      font-size: 0.8rem;
+      padding: 6px 4px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .footer-links a:hover {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: underline;
+    }
+
+    @media (min-width: 768px) {
+      .header {
+        padding: 12px 20px;
+      }
+
+      .header-logo {
+        height: 36px;
+      }
+
+      .header-title {
+        font-size: 1.5rem;
+        letter-spacing: 0.05em;
+        max-width: none;
+      }
+
+      .content {
+        padding: 40px 20px 60px;
+      }
+
+      .content h1 {
+        font-size: 1.75rem;
+      }
+
+      .content h2 {
+        font-size: 1.15rem;
+      }
+
+      .footer {
+        padding: 32px max(20px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+      }
+
+      .footer-links a {
+        min-height: auto;
+        padding: 4px 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="../../v1-azul.html">
+      <img src="../images/logo-G1-branco.png" alt="g1" class="header-logo">
+    </a>
+    <h1 class="header-title">JORNAL NACIONAL</h1>
+    <button class="header-menu" type="button" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="6" r="1.5"/>
+        <circle cx="12" cy="12" r="1.5"/>
+        <circle cx="12" cy="18" r="1.5"/>
+      </svg>
+    </button>
+  </header>
+
+  <main class="content">
+    <a href="../../v1-azul.html" class="btn-voltar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Voltar à página
+    </a>
+    <h1>Política de Privacidade</h1>
+    <p>Última atualização: fevereiro de 2025.</p>
+
+    <h2>1. Coleta de Dados</h2>
+    <p>
+      Coletamos informações quando você utiliza nosso site, incluindo dados de navegação (como endereço IP, páginas 
+      visitadas e tempo de permanência) e informações fornecidas voluntariamente em formulários ou cadastros.
+    </p>
+
+    <h2>2. Uso de Cookies</h2>
+    <p>
+      Utilizamos cookies e tecnologias similares para melhorar sua experiência, personalizar conteúdo e analisar 
+      o tráfego do site. Os cookies podem ser de sessão (temporários) ou persistentes. Você pode configurar seu 
+      navegador para recusar cookies, mas isso pode afetar o funcionamento de algumas funcionalidades.
+    </p>
+
+    <h2>3. Parâmetros UTM e Rastreamento</h2>
+    <p>
+      Nosso site utiliza parâmetros UTM e pixels de rastreamento para monitorar a eficácia de campanhas de marketing 
+      e entender como os visitantes chegam à nossa página. Esses dados nos ajudam a aprimorar nossas estratégias 
+      de divulgação.
+    </p>
+
+    <h2>4. Compartilhamento de Dados</h2>
+    <p>
+      Não vendemos suas informações pessoais. Podemos compartilhar dados com prestadores de serviços que auxiliam 
+      na operação do site (como hospedagem e ferramentas de análise), sempre sob obrigação de confidencialidade e 
+      em conformidade com a legislação aplicável.
+    </p>
+
+    <h2>5. Seus Direitos</h2>
+    <p>
+      De acordo com a Lei Geral de Proteção de Dados (LGPD), você tem direito a acessar, corrigir, excluir ou 
+      portar seus dados pessoais, além de revogar consentimentos. Para exercer esses direitos, entre em contato 
+      conosco através dos canais disponíveis no site.
+    </p>
+
+    <h2>6. Segurança</h2>
+    <p>
+      Adotamos medidas técnicas e organizacionais para proteger seus dados contra acesso não autorizado, alteração, 
+      divulgação ou destruição. No entanto, nenhuma transmissão pela internet é totalmente segura.
+    </p>
+
+    <h2>7. Alterações</h2>
+    <p>
+      Esta Política de Privacidade pode ser atualizada periodicamente. Recomendamos que você revise esta página 
+      para se manter informado sobre como protegemos suas informações.
+    </p>
+
+    <h2>8. Contato</h2>
+    <p>
+      Para dúvidas relacionadas a esta Política de Privacidade ou ao tratamento de seus dados, entre em contato 
+      através dos canais disponíveis em nosso site.
+    </p>
+    <a href="../../v1-azul.html" class="btn-voltar" style="margin-top: 32px; margin-bottom: 0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Voltar à página
+    </a>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="politica-de-privacidade.html">Política de Privacidade</a>
+      <a href="termos-de-uso.html">Termos de Uso</a>
+    </div>
+  </footer>
+</body>
+</html>

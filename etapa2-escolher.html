@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#D61E1C">
+<title>Análise do Sistema Japa da Loto — LotoFácil | G1</title>
+<meta name="description" content="Localize a brecha no sistema para a sua região e libere seu jogo da LotoFácil.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+*:focus,*:focus-visible{outline:none!important}
+:root{
+  --g1-red:#D61E1C;
+  --g1-blue:#0056B3;
+  --g1-text:#1A1A1A;
+  --g1-text-secondary:#444;
+  --g1-text-muted:#717171;
+  --g1-border:#E0E0E0;
+  --g1-bg:#F5F5F5;
+  --g1-white:#FFF;
+  --green-main:#00a849;
+  --green-dark:#1a7a54;
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{font-family:'Encode Sans',Helvetica,Arial,sans-serif;background:var(--g1-bg);color:var(--g1-text);overflow-x:hidden;line-height:1.6;padding-bottom:env(safe-area-inset-bottom);margin:0}
+.g1-header{background:var(--g1-red);position:relative;box-shadow:0 2px 8px rgba(0,0,0,.15);overflow:hidden}
+.g1-header::before{content:'';position:absolute;bottom:100%;left:0;right:0;height:60px;background:var(--g1-red);pointer-events:none;z-index:-1}
+.g1-header-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:48px}
+.g1-menu-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:8px}
+.g1-menu-btn span{display:block;width:20px;height:2.5px;background:#fff;border-radius:2px}
+.g1-logo{font-size:32px;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;position:absolute;left:50%;transform:translateX(-50%)}
+.g1-header-actions{display:flex;align-items:center;gap:12px}
+.g1-header-actions svg{width:22px;height:22px;fill:#fff;cursor:pointer;opacity:.9}
+.g1-user-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center}
+.g1-user-icon svg{width:16px;height:16px}
+
+.main-content{max-width:420px;margin:0 auto;padding:24px 16px calc(40px + env(safe-area-inset-bottom))}
+
+.screen{display:none;animation:fadeIn .4s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ========== TELA 1 ========== */
+.lcard{background:var(--g1-white) url('assets/images/imagem-fundo-card.png') center/cover no-repeat;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.07);cursor:pointer;transition:all .2s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.lcard:active{transform:scale(.97)}
+
+.lcard-top{padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:6px}
+.lcard-top img{width:48px;height:48px;object-fit:contain;filter:brightness(0) invert(1)}
+.lcard-top-text{font-size:21px;font-weight:900;color:#fff;line-height:1;letter-spacing:-.03em}
+
+.lcard.lotofacil .lcard-top{background:#aa2293}
+.lcard.lotofacil .lcard-top img{width:36px;height:36px}
+.lcard.lotofacil .lcard-top-text{font-size:24px}
+.lcard.lotofacil{border:3px solid #aa2293}
+.lcard.mega .lcard-top{background:#00a849}
+.lcard.mega{border:3px solid #00a849}
+.lcard.quina .lcard-top{background:#292d96}
+.lcard.quina{border:3px solid #292d96}
+.lcard.dupla .lcard-top{background:#c12742}
+.lcard.dupla{border:3px solid #c12742}
+.lcard.dia .lcard-top{background:#edc900}
+.lcard.dia{border:3px solid #edc900}
+
+.lcard-body{padding:14px 20px;text-align:center}
+.lcard-prize{font-size:22px;font-weight:900;color:var(--g1-text);line-height:1;margin-bottom:4px}
+.lcard-concurso{font-size:13px;color:var(--g1-text-muted);font-weight:600}
+.lcard-concurso strong{color:var(--g1-text-secondary)}
+
+.lcard-btn-pulse{display:block;width:100%;margin-top:14px;padding:14px 18px;background:linear-gradient(135deg,#aa2293,#c42da8);color:#fff!important;font-size:16px;font-weight:800;font-family:inherit;border:none;border-radius:12px;cursor:pointer;text-align:center;transition:all .22s;touch-action:manipulation;box-shadow:0 4px 16px rgba(170,34,147,.4);animation:lcardPulse 1.6s ease-in-out infinite;pointer-events:none;text-transform:uppercase}
+@keyframes lcardPulse{0%,100%{transform:scale(1);box-shadow:0 4px 16px rgba(170,34,147,.4)}50%{transform:scale(1.02);box-shadow:0 6px 24px rgba(170,34,147,.55)}}
+
+/* ========== TELA 2: LOADING ========== */
+.loading-wrap{text-align:center;padding:50px 0}
+.loading-icon{display:flex;justify-content:center;margin-bottom:24px;animation:pulse 1.5s ease infinite}
+.loading-icon img{width:64px;height:64px;object-fit:contain;display:block}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.75}}
+.loading-percent{font-size:28px;font-weight:900;color:var(--green-main);margin-bottom:14px}
+.loading-bar-wrap{width:100%;height:8px;background:var(--g1-border);border-radius:4px;overflow:hidden;margin-bottom:20px}
+.loading-bar{height:100%;background:linear-gradient(90deg,var(--g1-red),#ff6b6b);border-radius:4px;transition:width .3s linear;width:0}
+.loading-breach-msg{font-size:14px;font-weight:600;color:var(--g1-text-secondary);line-height:1.45;margin:0 auto 14px;padding:0 6px;max-width:22rem}
+.loading-analyze-card{
+  background:#fff;
+  border-radius:14px;
+  padding:18px 16px 14px;
+  border:1px solid #e8e8e8;
+  box-shadow:0 2px 18px rgba(0,0,0,.07);
+  max-width:22rem;
+  margin:0 auto;
+  text-align:left;
+}
+.loading-step{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:11px 0;
+  border-bottom:1px solid #f5f5f5;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+.loading-step:last-child{border-bottom:none}
+.loading-step.step-visible{opacity:1;transform:translateY(0)}
+.loading-step-icon{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.step-spinner{width:20px;height:20px;border:2.5px solid #e0e0e0;border-top-color:#aa2293;border-radius:50%;animation:stepSpin .75s linear infinite}
+@keyframes stepSpin{to{transform:rotate(360deg)}}
+.step-check{display:none;width:24px;height:24px;border-radius:50%;background:#00a849;align-items:center;justify-content:center;flex-shrink:0}
+.step-check svg{width:12px;height:12px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.loading-step.step-done .step-spinner{display:none}
+.loading-step.step-done .step-check{display:flex}
+.loading-step-text{font-size:15px;font-weight:600;color:#888;line-height:1.45}
+.loading-step.step-visible .loading-step-text{color:#555}
+.loading-step.step-done .loading-step-text{color:#1a1a1a}
+.loading-msg{display:none}
+
+/* ===== POPUP CONCLUSÃO ===== */
+#foundPopup{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  background:rgba(10,10,10,.6);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  opacity:0;pointer-events:none;
+  transition:opacity .35s ease;
+}
+#foundPopup.popup-show{opacity:1;pointer-events:auto}
+.found-popup-box{
+  font-family:'Encode Sans',Helvetica,Arial,sans-serif;
+  background:#fff;
+  border-radius:20px;
+  padding:36px 28px 28px;
+  max-width:310px;
+  width:100%;
+  text-align:center;
+  box-shadow:0 24px 64px rgba(0,0,0,.25);
+  transform:translateY(24px) scale(.95);
+  transition:transform .5s cubic-bezier(.34,1.45,.64,1);
+}
+#foundPopup.popup-show .found-popup-box{transform:translateY(0) scale(1)}
+.found-popup-icon{
+  width:76px;height:76px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--green-main),var(--green-dark));
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;
+  box-shadow:0 8px 24px rgba(0,168,73,.38);
+  position:relative;
+}
+.found-popup-icon::after{
+  content:'';position:absolute;inset:-5px;
+  border-radius:50%;
+  border:2px solid rgba(0,168,73,.2);
+}
+.found-popup-icon svg{width:36px;height:36px;fill:none;stroke:#fff;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.found-popup-label{
+  display:inline-block;
+  font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--green-main);
+  background:rgba(0,168,73,.09);
+  border-radius:999px;padding:4px 12px;
+  margin-bottom:10px;
+}
+.found-popup-title{
+  font-size:22px;font-weight:900;color:var(--g1-text);
+  line-height:1.2;margin-bottom:8px;letter-spacing:-.01em;
+}
+.found-popup-sub{
+  font-size:14px;font-weight:500;color:var(--g1-text-muted);
+  line-height:1.55;margin-bottom:24px;
+}
+.found-popup-bar-wrap{
+  width:100%;height:6px;
+  background:#f0f0f0;border-radius:4px;
+  overflow:hidden;
+}
+.found-popup-bar-fill{
+  height:100%;width:0;
+  background:linear-gradient(90deg,var(--green-main),var(--green-dark));
+  border-radius:4px;
+  transition:width 2.8s linear;
+}
+
+#screenLoading{background:none}
+#screenResult{background:none}
+
+/* ========== TELA 3: RESULTADO ========== */
+.result-card{position:relative;background:url('assets/images/img-fundo-9-16.png') center/cover no-repeat;border-radius:22px;box-shadow:0 20px 60px rgba(16,24,40,.12);overflow:hidden;border:1px solid rgba(255,255,255,.8)}
+.result-card-header{position:relative;padding:20px 18px 16px;text-align:center}
+.result-title{font-size:18px;font-weight:500;color:var(--g1-text);line-height:1.3;margin-bottom:14px;text-align:center}
+.result-card-header .result-lottery-chip{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0;background:transparent;color:#fff;font-size:28px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.result-lottery-chip img{width:28px;height:28px;object-fit:contain;filter:brightness(0) invert(1)}
+
+.result-card-body{position:relative;padding:22px 16px 20px;text-align:center}
+.result-kicker{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;margin-bottom:16px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.result-kicker-dot{width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 6px currentColor}
+
+.numbers-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:22px}
+.number-cell{width:48px;height:48px;border:1px solid rgba(255,255,255,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;position:relative;overflow:hidden;opacity:0;transform:translateY(8px) scale(.88);transition:opacity .28s ease,transform .28s ease}
+.number-cell::before{content:'';position:absolute;top:6px;left:9px;width:16px;height:10px;border-radius:50%;background:rgba(255,255,255,.26);filter:blur(2px)}
+.number-cell.revealed,.number-cell.locked{opacity:1;transform:translateY(0) scale(1)}
+.number-cell .num-val{opacity:1;filter:none;transition:filter .2s ease,opacity .2s ease}
+.number-cell.locked .num-val{filter:blur(6px);opacity:.4;user-select:none}
+.number-cell .num-lock{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s ease;pointer-events:none;background:rgba(0,0,0,.08);border-radius:50%}
+.number-cell .num-lock svg{width:18px;height:18px;fill:none;stroke:rgba(255,255,255,.96);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.number-cell.locked .num-lock{opacity:1}
+
+.result-estimate{font-size:13px;color:#677085;margin-bottom:14px;font-weight:600}
+.result-prize-box{display:flex;align-items:center;justify-content:center;width:100%;padding:15px 18px;margin-bottom:12px;border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
+.result-prize-value{font-size:clamp(22px,6.5vw,32px);font-weight:900;letter-spacing:-.03em}
+.result-note{font-size:11px;color:#7a7a7a;margin-bottom:18px}
+.post-reveal-block{display:none}
+.post-reveal-block.visible{display:block;animation:fadeIn .35s ease}
+
+.btn-reveal{position:relative;display:block;width:100%;padding:18px 18px;background-color:#08aa43;color:#fff!important;font-size:18px;font-weight:800;font-family:inherit;border:none;border-radius:14px;cursor:pointer;text-decoration:none;text-align:center;transition:all .22s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;letter-spacing:.01em;margin-bottom:8px;box-shadow:0 4px 15px rgba(34,197,94,.4);animation:btnPulse 1.6s ease-in-out infinite}
+.btn-reveal:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(34,197,94,.7)}
+.btn-reveal-subtext{display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,.8);margin-top:4px}
+@keyframes btnPulse{0%,100%{transform:scale(1);box-shadow:0 4px 15px rgba(34,197,94,.4)}50%{transform:scale(1.04);box-shadow:0 6px 25px rgba(34,197,94,.7)}}
+
+.result-timer{text-align:center;font-size:12px;color:var(--g1-red);font-weight:700;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:5px}
+.result-timer-dot{width:6px;height:6px;border-radius:50%;background:var(--g1-red);animation:blink 1s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.result-disclaimer{font-size:11px;color:#747474;line-height:1.55;padding:14px 14px;border-radius:12px}
+
+@media(max-width:380px){
+  .g1-header-inner{padding:0 12px}
+  .main-content{padding:16px 12px calc(36px + env(safe-area-inset-bottom))}
+  .lcard-top{padding:12px 16px}
+  .lcard-top img{width:24px;height:24px;filter:brightness(0) invert(1)}
+  .lcard-top-text{font-size:18px}
+  .lcard-body{padding:12px 16px}
+  .lcard-prize{font-size:20px}
+  .number-cell{width:42px;height:42px;font-size:14px}
+  .result-card-header .result-lottery-chip{font-size:24px}
+  .result-card-header .result-lottery-chip img{width:24px;height:24px}
+  .result-prize-value{font-size:20px}
+}
+</style>
+
+<script
+  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+  data-utmify-prevent-xcod-sck
+  data-utmify-prevent-subids
+  async
+  defer
+></script>
+<script>
+  window.pixelId = "68092479fde434f6021c8c7b";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+</head>
+<body>
+<script>
+(function(){
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  function goTop(){ window.scrollTo(0,0); }
+  window.addEventListener('load', goTop);
+  window.addEventListener('pageshow', goTop);
+})();
+</script>
+
+
+<section class="main-content">
+
+  <!-- TELA 1: só dados ocultos para API (nunca visível) -->
+  <div class="screen" id="screenPick">
+    <div id="defaultLotofacilCard" class="lcard lotofacil" hidden data-api="lotofacil" data-lottery="Lotofácil" data-prize="5000000" data-count="15" data-max="25" data-concurso="3633" aria-hidden="true">
+      <div class="lcard-body">
+        <div class="lcard-prize" data-prize-el>R$ 5 Milhões</div>
+        <div class="lcard-concurso" data-concurso-el>Concurso nº <strong>3633</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TELA 2: estado inicial visível da página -->
+  <div class="screen active" id="screenLoading">
+    <div class="loading-wrap">
+      <div class="loading-icon"><img src="assets/images/logo-loteria.webp" alt="Loteria"></div>
+      <div class="loading-percent" id="loadPercent">0%</div>
+      <div class="loading-bar-wrap"><div class="loading-bar" id="loadBar"></div></div>
+      <p class="loading-breach-msg">Localizando a brecha no sistema para a sua região…</p>
+      <div class="loading-analyze-card">
+        <div class="loading-step" id="step1">
+          <div class="loading-step-icon">
+            <div class="step-spinner"></div>
+            <div class="step-check"><svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,10 10.5,2"/></svg></div>
+          </div>
+          <span class="loading-step-text">Conectando ao servidor seguro…</span>
+        </div>
+        <div class="loading-step" id="step2">
+          <div class="loading-step-icon">
+            <div class="step-spinner"></div>
+            <div class="step-check"><svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,10 10.5,2"/></svg></div>
+          </div>
+          <span class="loading-step-text">Escaneando falhas na Lotofácil, Quina e Mega-Sena…</span>
+        </div>
+        <div class="loading-step" id="step3">
+          <div class="loading-step-icon">
+            <div class="step-spinner"></div>
+            <div class="step-check"><svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,10 10.5,2"/></svg></div>
+          </div>
+          <span class="loading-step-text" id="loadWordRegion">Sincronizando com a base de dados da sua região…</span>
+        </div>
+        <div class="loading-step" id="step4">
+          <div class="loading-step-icon">
+            <div class="step-spinner"></div>
+            <div class="step-check"><svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,10 10.5,2"/></svg></div>
+          </div>
+          <span class="loading-step-text">Validando canais criptografados…</span>
+        </div>
+      </div>
+      <div class="loading-msg" id="loadMsg" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <!-- TELA 3 -->
+  <div class="screen" id="screenResult">
+    <div class="result-card" id="resultCard">
+      <div class="result-card-header" id="resultHeader">
+        <div class="result-lottery-chip" id="resultChip"></div>
+      </div>
+      <div class="result-card-body">
+        <h3 class="result-title" id="resultTitle">Jogo premiado gerado com sucesso</h3>
+        <div class="numbers-grid" id="numbersGrid"></div>
+        <div class="result-estimate">Com esses números sua premiação pode chegar a:</div>
+        <div class="result-prize-box" id="resultPrizeBox">
+          <span class="result-prize-value" id="prizeValue">R$ 0,00</span>
+        </div>
+        <div class="result-note" id="resultNote">Apenas 1 combinação disponível para esse concurso. Libere antes que expire.</div>
+        <div class="post-reveal-block" id="postRevealBlock">
+          <a class="btn-reveal" href="etapa3-vsl-02.html" id="btnReveal">Revelar Números<span class="btn-reveal-subtext">Toque para liberar sua combinação</span></a>
+          <div class="result-timer"><span class="result-timer-dot"></span> Essa combinação expira em <strong id="timerCount">05:00</strong></div>
+          <div class="result-disclaimer" id="resultDisclaimer">Os números foram gerados com um sistema avançado de inteligência artificial que encontra brecha no sistema da loteria. Anote os números para jogar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<noscript>
+  <p style="text-align:center;padding:24px 16px;font-size:15px"><a href="etapa3-vsl-02.html">Continuar para a próxima etapa</a></p>
+</noscript>
+
+</section>
+
+<script>
+(function(){
+  /** VSL 02 (segundo vídeo do funil) */
+  var NEXT_PAGE = 'etapa3-vsl-02.html';
+  var API_URL = 'assets/ferramentas/loterias-cache.php';
+
+  var apiNameMap = {
+    'LOTOFÁCIL': 'lotofacil',
+    'MEGA-SENA': 'megasena',
+    'QUINA': 'quina',
+    'DUPLASENA': 'duplasena',
+    'DIA DE SORTE': 'diadesorte'
+  };
+
+  var colorMap = {
+    lotofacil:  { main:'#aa2293', light:'#f8e4f4', dark:'#8d1d7a' },
+    megasena:   { main:'#00a849', light:'#e3f9ec', dark:'#00893c' },
+    quina:      { main:'#292d96', light:'#e7e9fb', dark:'#20247b' },
+    duplasena:  { main:'#c12742', light:'#fde7ec', dark:'#9d2036' },
+    diadesorte: { main:'#edc900', light:'#fff8d8', dark:'#b79b00' }
+  };
+  var chosenLottery = '';
+  var chosenPrize = 0;
+  var chosenCount = 15;
+  var chosenMax = 25;
+  var chosenApi = '';
+  var chosenConcurso = '';
+  var timerInterval = null;
+  var apiTimedOut = false;
+  var apiFallbackTimer = null;
+
+  var screenPick = document.getElementById('screenPick');
+  var screenLoading = document.getElementById('screenLoading');
+  var screenResult = document.getElementById('screenResult');
+  var loadPercent = document.getElementById('loadPercent');
+  var loadBar = document.getElementById('loadBar');
+  var loadMsg = document.getElementById('loadMsg');
+  var numbersGrid = document.getElementById('numbersGrid');
+  var prizeValue = document.getElementById('prizeValue');
+  var btnReveal = document.getElementById('btnReveal');
+  var resultHeader = document.getElementById('resultHeader');
+  var resultChip = document.getElementById('resultChip');
+  var resultTitle = document.getElementById('resultTitle');
+  var resultPrizeBox = document.getElementById('resultPrizeBox');
+  var resultNote = document.getElementById('resultNote');
+  var resultDisclaimer = document.getElementById('resultDisclaimer');
+  var postRevealBlock = document.getElementById('postRevealBlock');
+  var timerCount = document.getElementById('timerCount');
+  var loadWordRegion = document.getElementById('loadWordRegion');
+  var loadSteps = [
+    { el: document.getElementById('step1'), show: 1,  done: 28 },
+    { el: document.getElementById('step2'), show: 28, done: 56 },
+    { el: document.getElementById('step3'), show: 56, done: 82 },
+    { el: document.getElementById('step4'), show: 82, done: 100 }
+  ];
+  var stepFlags = [false,false,false,false,false,false,false,false]; /* shown/done per step */
+  function updateSteps(pct) {
+    loadSteps.forEach(function(s, i) {
+      if (pct >= s.show && !stepFlags[i*2]) {
+        stepFlags[i*2] = true;
+        s.el.classList.add('step-visible');
+      }
+      if (pct >= s.done && !stepFlags[i*2+1]) {
+        stepFlags[i*2+1] = true;
+        s.el.classList.add('step-done');
+      }
+    });
+  }
+
+  fetch('https://ipapi.co/json/')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var c = d.city;
+      if (c && typeof c === 'string') {
+        c = c.trim();
+        if (c.length > 0 && loadWordRegion) {
+          loadWordRegion.textContent = 'Sincronizando com a base de dados da região de ' + c + '…';
+        }
+      }
+    })
+    .catch(function() {});
+
+  function applyChoicesFromDefaultCard() {
+    var card = document.getElementById('defaultLotofacilCard');
+    if (!card) return;
+    chosenLottery = card.dataset.lottery || 'Lotofácil';
+    chosenPrize = parseInt(card.dataset.prize, 10) || 0;
+    chosenCount = parseInt(card.dataset.count, 10) || 15;
+    chosenMax = parseInt(card.dataset.max, 10) || 25;
+    chosenApi = card.dataset.api || 'lotofacil';
+    chosenConcurso = card.dataset.concurso || '';
+  }
+
+  function formatBRL(val) {
+    if (val >= 1000000) {
+      var m = (val / 1000000).toFixed(0);
+      return 'R$ ' + m + ' Milhões';
+    } else if (val >= 1000) {
+      return 'R$ ' + (val / 1000).toFixed(0) + ' Mil';
+    }
+    return 'R$ ' + val.toLocaleString('pt-BR');
+  }
+
+  function formatFullBRL(val) {
+    return 'R$ ' + val.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+
+  function setCardsFetchingState() {
+    document.querySelectorAll('.lcard').forEach(function(card) {
+      card.dataset.apiLoaded = '0';
+      var prizeEl = card.querySelector('[data-prize-el]');
+      if (prizeEl) prizeEl.textContent = 'Buscando...';
+
+      var concursoEl = card.querySelector('[data-concurso-el]');
+      if (concursoEl) concursoEl.textContent = 'Buscando...';
+    });
+  }
+
+  function applyFallbackData() {
+    document.querySelectorAll('.lcard').forEach(function(card) {
+      if (card.dataset.apiLoaded === '1') return;
+      var fallbackPrize = parseInt(card.dataset.prize, 10) || 0;
+      var fallbackConcurso = card.dataset.concurso || '';
+
+      var prizeEl = card.querySelector('[data-prize-el]');
+      if (prizeEl) prizeEl.textContent = formatBRL(fallbackPrize);
+
+      var concursoEl = card.querySelector('[data-concurso-el]');
+      if (concursoEl && fallbackConcurso) {
+        concursoEl.innerHTML = 'Concurso nº <strong>' + fallbackConcurso + '</strong>';
+      }
+    });
+  }
+
+  function loadAPI() {
+    fetch(API_URL)
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        if (apiTimedOut) return;
+        data.forEach(function(item) {
+          var nome = item.loteria;
+          var res = item.resultado;
+          var apiKey = apiNameMap[nome];
+          if (!apiKey) return;
+
+          var card = document.querySelector('.lcard[data-api="' + apiKey + '"]');
+          if (!card) return;
+
+          var estimado = res.valor_estimado_proximo_concurso || 0;
+          if (estimado > 0) {
+            card.dataset.prize = estimado;
+            var prizeEl = card.querySelector('[data-prize-el]');
+            if (prizeEl) prizeEl.textContent = formatBRL(estimado);
+          }
+
+          var concurso = res.numero_concurso;
+          if (concurso) {
+            var nextConcurso = parseInt(concurso) + 1;
+            card.dataset.concurso = nextConcurso;
+            var concursoEl = card.querySelector('[data-concurso-el]');
+            if (concursoEl) concursoEl.innerHTML = 'Concurso nº <strong>' + nextConcurso + '</strong>';
+          }
+
+          card.dataset.apiLoaded = '1';
+        });
+
+        var pending = document.querySelector('.lcard[data-api-loaded="0"]');
+        if (!pending && apiFallbackTimer) {
+          clearTimeout(apiFallbackTimer);
+          apiFallbackTimer = null;
+        }
+      })
+      .catch(function(){});
+  }
+
+  function showScreen(screen) {
+    [screenPick, screenLoading, screenResult].forEach(function(s){ s.classList.remove('active'); });
+    screen.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function goToVSL02() {
+    var popup = document.getElementById('foundPopup');
+    var bar   = document.getElementById('popupBarFill');
+    if (popup) {
+      popup.classList.add('popup-show');
+      /* ativa a barra de progresso após o navegador pintar o estado inicial */
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          if (bar) bar.style.width = '100%';
+        });
+      });
+    }
+    setTimeout(function() {
+      window.location.href = NEXT_PAGE + (window.location.search || '');
+    }, 3200);
+  }
+
+  function startLoading() {
+    showScreen(screenLoading);
+
+    var durationMs = 7000;
+    var startedAt = performance.now();
+    loadPercent.textContent = '0%';
+    loadBar.style.width = '0%';
+
+    function tick(now) {
+      var elapsed = now - startedAt;
+      var percent = Math.min(100, Math.floor((elapsed / durationMs) * 100));
+      loadPercent.textContent = percent + '%';
+      loadBar.style.width = percent + '%';
+      updateSteps(percent);
+
+      if (elapsed >= durationMs) {
+        loadPercent.textContent = '100%';
+        loadBar.style.width = '100%';
+        goToVSL02();
+        return;
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function generateNumbers(count, max) {
+    var nums = [];
+    while (nums.length < count) {
+      var n = Math.floor(Math.random() * max) + 1;
+      if (nums.indexOf(n) === -1) nums.push(n);
+    }
+    return nums.sort(function(a, b) { return a - b; });
+  }
+
+  function hexToRgba(hex, a) {
+    var r = parseInt(hex.slice(1,3),16);
+    var g = parseInt(hex.slice(3,5),16);
+    var b = parseInt(hex.slice(5,7),16);
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+
+  function lighten(hex, amt) {
+    var r = Math.min(255, parseInt(hex.slice(1,3),16) + amt);
+    var g = Math.min(255, parseInt(hex.slice(3,5),16) + amt);
+    var b = Math.min(255, parseInt(hex.slice(5,7),16) + amt);
+    return 'rgb('+r+','+g+','+b+')';
+  }
+
+  function showResult() {
+    showScreen(screenResult);
+
+    var colors = colorMap[chosenApi] || colorMap.megasena;
+
+    resultHeader.style.background = 'linear-gradient(135deg,' + colors.dark + ' 0%,' + colors.main + ' 55%,' + lighten(colors.main, 30) + ' 100%)';
+
+    resultChip.innerHTML = '<img src="assets/images/logo-loteria.webp" alt=""> ' + chosenLottery.toUpperCase();
+
+    resultTitle.innerHTML = chosenConcurso
+      ? 'Jogo premiado gerado com sucesso - Concurso nº <strong>' + chosenConcurso + '</strong>'
+      : 'Jogo premiado gerado com sucesso';
+
+    var nums = generateNumbers(chosenCount, chosenMax);
+    var lockedCount = 3;
+    numbersGrid.innerHTML = '';
+    postRevealBlock.classList.remove('visible');
+
+    nums.forEach(function(n, i) {
+      var cell = document.createElement('div');
+      cell.className = 'number-cell';
+      cell.style.animationDelay = (i * 0.06) + 's';
+      cell.style.background = 'radial-gradient(circle at 32% 28%, ' + lighten(colors.main, 60) + ' 0%, ' + colors.main + ' 38%, ' + colors.dark + ' 100%)';
+      cell.style.boxShadow = '0 10px 22px ' + hexToRgba(colors.dark, 0.28) + ', inset 0 2px 5px rgba(255,255,255,.24)';
+      cell.innerHTML = '<span class="num-val">' + (n < 10 ? '0' + n : n) + '</span><span class="num-lock" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3"></path><rect x="5" y="10" width="14" height="11" rx="2"></rect></svg></span>';
+      numbersGrid.appendChild(cell);
+    });
+
+    var cells = numbersGrid.querySelectorAll('.number-cell');
+    var revealIndex = 0;
+    var totalToReveal = Math.max(0, cells.length - lockedCount);
+    var totalRevealMs = 2000;
+    var revealDelay = totalToReveal > 1 ? Math.round(totalRevealMs / (totalToReveal - 1)) : totalRevealMs;
+
+    function revealNext() {
+      if (revealIndex < totalToReveal) {
+        cells[revealIndex].classList.add('revealed');
+        revealIndex++;
+        if (revealIndex < totalToReveal) {
+          setTimeout(revealNext, revealDelay);
+          return;
+        }
+      } else {
+        // Fallback de seguranca quando nao houver numeros a revelar.
+      }
+
+      for (var j = totalToReveal; j < cells.length; j++) {
+        cells[j].classList.add('revealed');
+        cells[j].classList.add('locked');
+      }
+      postRevealBlock.classList.add('visible');
+      startTimer();
+      setTimeout(function() {
+        btnReveal.scrollIntoView({behavior:'smooth', block:'center'});
+      }, 220);
+    }
+    revealNext();
+
+    resultPrizeBox.style.background = 'linear-gradient(180deg, ' + colors.light + ' 0%, ' + hexToRgba(colors.main, 0.1) + ' 100%)';
+    resultPrizeBox.style.border = '2px solid ' + hexToRgba(colors.main, 0.7);
+
+    prizeValue.style.color = colors.dark;
+    prizeValue.textContent = formatFullBRL(chosenPrize);
+
+    resultDisclaimer.style.background = 'linear-gradient(180deg, #fcfffd 0%, ' + colors.light + ' 100%)';
+    resultDisclaimer.style.borderColor = hexToRgba(colors.main, 0.14);
+
+    btnReveal.href = NEXT_PAGE;
+  }
+
+  function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    var seconds = 300;
+    function update() {
+      var m = Math.floor(seconds / 60);
+      var s = seconds % 60;
+      timerCount.textContent = (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+      if (seconds <= 0) clearInterval(timerInterval);
+      seconds--;
+    }
+    update();
+    timerInterval = setInterval(update, 1000);
+  }
+
+  setCardsFetchingState();
+  apiFallbackTimer = setTimeout(function() {
+    apiTimedOut = true;
+    applyFallbackData();
+  }, 3000);
+  loadAPI();
+  applyChoicesFromDefaultCard();
+  startLoading();
+})();
+</script>
+
+<script>
+(function(){
+  function gid(n){var c=document.cookie.match(new RegExp('(?:^|; )'+n+'=([^;]*)'));return c?c[1]:null}
+  function sid(n,v,d){var e=new Date;e.setTime(e.getTime()+d*864e5);document.cookie=n+'='+v+';path=/;expires='+e.toUTCString()+';SameSite=Lax'}
+  function uuid(){return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return(c==='x'?r:r&3|8).toString(16)})}
+  var vid=gid('_jap_vid');if(!vid){vid=uuid();sid('_jap_vid',vid,365)}
+  var ss=sessionStorage.getItem('_jap_sid');if(!ss){ss=uuid();sessionStorage.setItem('_jap_sid',ss)}
+  var p=new URLSearchParams(location.search);
+  fetch('/analytics/track.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page_slug:'etapa2-escolher',funnel_id:'5',visitor_id:vid,session_id:ss,utm_source:p.get('utm_source')||'',utm_medium:p.get('utm_medium')||'',utm_campaign:p.get('utm_campaign')||'',utm_content:p.get('utm_content')||'',utm_term:p.get('utm_term')||'',referrer:document.referrer}),keepalive:true}).catch(function(){});
+})();
+</script>
+
+<!-- POPUP CONCLUSÃO -->
+<div id="foundPopup" role="dialog" aria-modal="true" aria-label="Jogos encontrados">
+  <div class="found-popup-box">
+    <div class="found-popup-icon">
+      <svg viewBox="0 0 34 34"><polyline points="5,17 13,25 29,9"/></svg>
+    </div>
+    <p class="found-popup-title">Jogos encontrados!</p>
+    <p class="found-popup-sub">A brecha foi localizada e sua sequência premiada foi liberada.</p>
+    <div class="found-popup-bar-wrap">
+      <div class="found-popup-bar-fill" id="popupBarFill"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
